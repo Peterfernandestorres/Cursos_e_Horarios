@@ -11,7 +11,7 @@ con = cx.connect (
     port = "6556",
     user = "root",
     password = "808",
-    database = "cursos_senac" 
+    database = "banco_cursos" 
     )
 
 cursor = con.cursor ()
@@ -20,17 +20,20 @@ class lista_de_cursos (QWidget):
     def __init__(self):
         super().__init__()
         self.setGeometry (150,150,750,500)
-        self.setWindowTitle ("Horários")
+        self.setWindowTitle ("Cursos e Horários")
 
         layout = QVBoxLayout ()
 
         Labelid = QLabel ("Cursos: ")
         self.editcursos = QLineEdit ()
 
-        Labelhora = QLabel ("Horário do Curso: ")
+        Labelhora = QLabel ("Horário: ")
         self.edithora = QLineEdit ()
 
-        psbCadastro = QPushButton ("Cadastrar")
+        Labeldisponivel = QLabel ("Disponivel: ")
+        self.editdisponivel = QLineEdit ()
+
+        psbCadastro = QPushButton ("Cadastrar Curso e Horário")
 
         self.LabelMsg = QLabel ("")
 
@@ -43,28 +46,27 @@ class lista_de_cursos (QWidget):
         layout.addWidget (psbCadastro)
         psbCadastro.clicked.connect (self.Upcli)
 
-        TBalunos = QTableWidget (self)
-        TBalunos.setColumnCount (4)
-        TBalunos.setRowCount (10)
+        TBcursos = QTableWidget (self)
+        TBcursos.setColumnCount (3)
+        TBcursos.setRowCount (10)
         
-        HeaderLine=["Cursos","Horários","cadastrar"]
+        HeaderLine=["Cursos","Hora","Disponivel"]
 
-        TBalunos.setHorizontalHeaderLabels (HeaderLine)
-        cursor.execute ("select * from Horários")
+        TBcursos.setHorizontalHeaderLabels (HeaderLine)
+        cursor.execute ("select * from tbcursos")
         lintb = 0
         for linha in cursor:
-            TBalunos.setItem (lintb,0,QTableWidgetItem(str(linha[0])))
-            TBalunos.setItem (lintb,1,QTableWidgetItem(linha[1]))
-            TBalunos.setItem (lintb,2,QTableWidgetItem(linha[2]))
-            TBalunos.setItem (lintb,3,QTableWidgetItem(linha[3]))
+            TBcursos.setItem (lintb,0,QTableWidgetItem(str(linha[0])))
+            TBcursos.setItem (lintb,1,QTableWidgetItem(linha[1]))
+            TBcursos.setItem (lintb,2,QTableWidgetItem(linha[2]))
             lintb+=1
 
-        layout.addWidget (TBalunos)
+        layout.addWidget (TBcursos)
         self.setLayout (layout)
 
 # adicionar os informação no banco de dados -----------------------------------------------------------------------------------------------
     def Upcli(self):
-        if(self.editid.text==""):
+        if(self.editcursos.text==""):
             print ("não é possivel atualizar sem o Curso e os Horários Corretos")
         elif(self.edithora.text ==""and self.editcursos.text ==""):
                 print("Não é  possivel atualizar se tiver todos os campo em branco")
@@ -78,7 +80,7 @@ class lista_de_cursos (QWidget):
 
 # atualizar tudo
         else:
-            cursor.execute("update alunos set nome_aluno=%s,cursos=%s,cadastro=%s where alunos_cursos=%s",
+            cursor.execute("update alunos set hora=%s,cursos=%s,cadastro=%s where hora=%s",
                            (self.edithora.text(),self.editcursos.text()))
         cx.commit()
         print("Todas as modificação foram realizadas !!!")

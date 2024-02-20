@@ -10,7 +10,7 @@ con = mc.connect (
     port = "6556",
     user = "root",
     password = "808",
-    database = "cursos_senac" 
+    database = "banco_cursos" 
     )
 
 cursor = con.cursor ()
@@ -19,7 +19,7 @@ class Cursos (QWidget):
     def __init__(self):
         super().__init__()
         self.setGeometry (30,40,600,300)
-        self.setWindowTitle ("Cadastro De Cursoss")
+        self.setWindowTitle ("Cadastro De Cursos")
 
         Labelhora = QLabel ("Horário do Curso: ")
         self.edithora = QLineEdit ()
@@ -46,11 +46,11 @@ class Cursos (QWidget):
         self.setLayout (layout)
 
     def cadCli(self):
-        cursor.execute ("Insert into alunos (hora,cursos)values(%s,%s)",
+        cursor.execute ("Insert into tbcursos (hora,cursos,disponivel)values(%s,%s,%s)",
                         (self.edithora.text(),self.editcursos.text()))
         print (self.edithora.text())
         con.commit ()
-        self.LabelMsg.setText ("aluno Cadastrado")
+        self.LabelMsg.setText ("horário Preenchido")
 
 if __name__ == "__main__":
     app = QApplication (sys.argv)

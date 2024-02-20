@@ -11,7 +11,7 @@ cx = mycon.connect (
     port = "6556",
     user = "root",
     password = "808",
-    database = "cursos_senac" 
+    database = "banco_cursos" 
     )
 cursor = cx.cursor ()
 
@@ -23,14 +23,14 @@ class ExibirCursos (QWidget):
         self.setWindowTitle ("cursos Cadastrados")
 
         TBcursos = QTableWidget (self)
-        TBcursos.setColumnCount (4)
+        TBcursos.setColumnCount (3)
         TBcursos.setRowCount (10)
         
         TBcursos = QTableWidget (self)
-        HeaderLine=["cursos","Hora"]
+        HeaderLine=["cursos","Hora","Disponivel"]
 
         TBcursos.setHorizontalHeaderLabels (HeaderLine)
-        cursor.execute ("select * from cursos")
+        cursor.execute ("select * from tbcursos")
         lintb = 0
         for linha in cursor:
             TBcursos.setItem (lintb,0,QTableWidgetItem(str(linha[0])))
